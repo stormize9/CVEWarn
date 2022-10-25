@@ -1,0 +1,70 @@
+{% extends 'admin/base.html' %}
+
+{% block content %}
+
+<div class="col-span-6 mt-6">
+    <div class="intro-y block sm:flex items-center h-10">
+        <h2 class="text-lg font-medium truncate mr-5">
+            Listes des clients
+        </h2>
+        <div style="margin-left: 70%;">
+          <a href="javascript:;" data-toggle="modal" data-target="#modal_ajout_utilisateur" class="btn btn-primary">Ajouter Utilisateurs</a>
+        </div>
+    </div>
+     <!-- BEGIN: Modal Content Ajout hote-->
+    <div id="modal_ajout_utilisateur" class="modal" tabindex="-1" aria-hidden="true">
+      <div class="modal-dialog">
+          <form class="modal-content" action="./clients/adduser" method="POST">
+              <!-- BEGIN: Modal Header -->
+              <div class="modal-header">
+                  <h2 class="font-medium text-base mr-auto">Ajouter un utilisateur</h2>
+              </div> <!-- END: Modal Header -->
+              <!-- BEGIN: Modal Body -->
+              <div class="modal-body grid grid-cols-12 gap-4 gap-y-3">
+                  <div class="col-span-12 sm:col-span-6"> <label for="nom" class="form-label">Nom</label> <input id="nom" name="nom" type="text" class="form-control" placeholder="Doe"> </div>
+                  <div class="col-span-12 sm:col-span-6"> <label for="prenom" class="form-label">Prénom</label> <input id="prenom" name="prenom" type="text" class="form-control" placeholder="John"> </div>
+                  <div class="col-span-12 sm:col-span-6"> <label for="email" class="form-label">Email</label> <input id="email" name="email" type="email" class="form-control" placeholder="john.doe@gmail.com"> </div>
+                  <div class="col-span-12 sm:col-span-6"> <label for="tel" class="form-label">Téléphone</label> <input id="tel" name="tel" type="tel" class="form-control" placeholder="0612345678"> </div>
+                  <div class="col-span-12 sm:col-span-6"> <label for="login" class="form-label">Identifiant</label> <input id="login" name="login" type="login" class="form-control" placeholder="john.doe"> </div>
+                  <div class="col-span-12 sm:col-span-6"> <label for="password" class="form-label">Mot de passe</label> <input id="password" name="password" type="password" class="form-control" placeholder="********"> </div>
+                  <div class="col-span-12 sm:col-span-12"> <label for="name_company" class="form-label">Nom entreprise</label> <input id="name_company" name="name_company" type="text" class="form-control" placeholder="ENSIBS Company"> </div>
+              </div> <!-- END: Modal Body -->
+              <!-- BEGIN: Modal Footer -->
+              <div class="modal-footer text-right"> <button type="button" data-dismiss="modal" class="btn btn-outline-secondary w-20 mr-1">Annuler</button> <button id="btn_ajout_utilisateur" type="submit" class="btn btn-primary w-20">Ajouter</button> </div> 
+              <!-- END: Modal Footer -->
+            </form>
+      </div>
+    </div> <!-- END: Modal Content Ajout Hote-->
+    <div class="intro-y overflow-auto lg:overflow-visible mt-8 sm:mt-0">
+      <table class="table table-report sm:mt-2">
+          <thead>
+              <tr>
+                  <th class="whitespace-nowrap">Identifiant</th>
+                  <th class="whitespace-nowrap">Nom</th>
+                  <th class="text-center whitespace-nowrap">Status</th>
+                  <th class="text-center whitespace-nowrap">ACTIONS</th>
+              </tr>
+          </thead>
+          <tbody>
+            {% for user in data.users %}
+              <tr class="intro-x">
+                  <td class="text">{{user.login}}</td>
+                  <td class="text">{{user.infrastructure_name}}</td>
+                  <td class="w-40">
+                      <div class="flex items-center justify-center text-theme-9"> <i data-feather="check-square" class="w-4 h-4 mr-2"></i> Active </div>
+                  </td>
+                  <td class="table-report__action w-56">
+                      <div class="flex justify-center items-center">
+                          <a class="flex items-center mr-3" href=""> <i data-feather="check-square" class="w-4 h-4 mr-1" title="Editer les données"></i> Edit </a>
+                          <a class="flex items-center text-theme-6" href=""> <i data-feather="trash-2" class="w-4 h-4 mr-1" title="Supprimer"></i> Delete</a>
+                          <a class="flex items-center text-theme-6" href=""> <i data-feather="trash-2" class="w-4 h-4 mr-1" title="Réinitialiser le mot de passe"></i> Reinit mdp</a>
+                      </div>
+                  </td>
+              </tr>
+            {% endfor %}
+          </tbody>
+      </table>
+    </div>
+  </div>
+
+{% endblock %}

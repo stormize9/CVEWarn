@@ -1,0 +1,169 @@
+{% set name = 'Hôtes' %}
+{% extends 'base.html' %}
+
+{% block content %}
+<!-- Begin: Notification Content -->
+<div id="success-notification-content" class="toastify-content hidden flex"> <i class="text-theme-9" data-feather="check-circle"></i>
+  <div class="ml-4 mr-4">
+    <div class="font-medium">Success</div>
+    <div class="text-gray-600 mt-1">Ajout à la base de données effectuée avec succès !</div>
+  </div>
+</div>
+
+
+<div id="basic-non-sticky-notification-content" class="toastify-content hidden flex"><i class="text-theme-6" data-feather="x-circle"></i>
+  <div class="font-medium">Erreur Ajout à la base de donnée !</div> 
+</div> 
+
+<!-- END: Notification Content -->
+<!-- BEGIN: Notification Toggle --> 
+<button id="success-notification-toggle" style="display: none;">Show Notification</button> 
+<button id="basic-non-sticky-notification-toggle" style="display: none;">Show Notification</button> 
+<!-- END: Notification Toggle -->
+
+<div class="grid grid-cols-12 gap-6">
+  <div class="col-span-12 xxl:col-span-9">
+      <div class="grid grid-cols-12 gap-6">
+          <!-- BEGIN: General Report -->
+          <div class="col-span-12 mt-8">
+              <div class="intro-y flex items-center h-10">
+                  <h2 class="text-lg font-medium truncate mr-5">
+                      Listes des hôtes
+                  </h2>
+              </div>
+              <div class="grid grid-cols-12 gap-6 mt-5">
+                  <div class="col-span-12 sm:col-span-6 xl:col-span-3 intro-y">
+                      <div class="report-box zoom-in">
+                          <div class="box p-5">
+                              <div class="flex">
+                                  <i data-feather="monitor" class="report-box__icon text-theme-12"></i> 
+                              </div>
+                              <div class="text-3xl font-bold leading-8 mt-6">{{hotes|length}}</div>
+                              <div class="text-base text-gray-600 mt-1">Nombre de machine</div>
+                          </div>
+                      </div>
+                  </div>
+                  <div class="col-span-12 sm:col-span-6 xl:col-span-3 intro-y">
+                      <div class="report-box zoom-in">
+                          <div class="box p-5">
+                              <div class="flex">
+                                  <i data-feather="user" class="report-box__icon text-theme-9"></i> 
+                              </div>
+                              <div class="text-3xl font-bold leading-8 mt-6">{{apps|length}}</div>
+                              <div class="text-base text-gray-600 mt-1">Nombre d'application</div>
+                          </div>
+                      </div>
+                  </div>
+              </div>
+          </div>
+          <!-- END: General Report -->
+          <!-- BEGIN: Graphique -->
+          <div class="col-span-12 sm:col-span-6 lg:col-span-3 mt-8">
+              <div class="intro-y flex items-center h-10">
+                  <h2 class="text-lg font-medium truncate mr-5">
+                      Graphique
+                  </h2>
+              </div>
+              <div class="intro-y box p-5 mt-5">
+                  <canvas id="my-pie-chart" height="300"></canvas> 
+              </div>
+          </div>
+          <!-- END: Graphique -->
+          <!-- BEGIN: Listes des hotes -->
+          <div class="col-span-6 mt-6" style="width: 150%;">
+            <div class="intro-y block sm:flex items-center h-10">
+                <h2 class="text-lg font-medium truncate mr-5">
+                    Listes des hôtes
+                </h2>
+                <div style="margin-left: 60%;">
+                  <a href="javascript:;" data-toggle="modal" data-target="#modal_ajout_os" class="btn btn-primary">Ajouter OS</a>
+                  <a href="javascript:;" data-toggle="modal" data-target="#modal_ajout_hote" class="btn btn-success">Ajouter</a>
+            
+                </div>
+            </div>
+             <!-- BEGIN: Modal Content Ajout hote-->
+            <div id="modal_ajout_hote" class="modal" tabindex="-1" aria-hidden="true">
+              <div class="modal-dialog">
+                  <div class="modal-content">
+                      <!-- BEGIN: Modal Header -->
+                      <div class="modal-header">
+                          <h2 class="font-medium text-base mr-auto">Ajouter un hôte</h2>
+                      </div> <!-- END: Modal Header -->
+                      <!-- BEGIN: Modal Body -->
+                      <div class="modal-body grid grid-cols-12 gap-4 gap-y-3">
+                          <div class="col-span-12 sm:col-span-6"> <label for="IP" class="form-label">IP</label> <input id="IP" type="text" class="form-control" placeholder="192.168.1.1"> </div>
+                          <div class="col-span-12 sm:col-span-6"> <label for="hostname" class="form-label">Hostname</label> <input id="hostname" type="text" class="form-control" placeholder="Hostname"> </div>
+                          <div class="col-span-12 sm:col-span-12"> <label for="os" class="form-label">OS</label> 
+                            <select id="os" class="form-select">
+                              {% for os in oss %}
+                              <option id="osref_{{ os.IDOS }}">{{os.os_name}} : {{os.os_version}}</option>
+                              {% endfor %}
+                            </select>
+                          </div>
+                      </div> <!-- END: Modal Body -->
+                      <!-- BEGIN: Modal Footer -->
+                      <div class="modal-footer text-right"> <button type="button" data-dismiss="modal" class="btn btn-outline-secondary w-20 mr-1">Annuler</button> <button id="btn_ajout_hote" type="button" class="btn btn-primary w-20">Ajouter</button> </div> <!-- END: Modal Footer -->
+                  </div>
+              </div>
+            </div> <!-- END: Modal Content Ajout Hote-->
+             <!-- BEGIN: Modal Content Ajout os-->
+             <div id="modal_ajout_os" class="modal" tabindex="-1" aria-hidden="true">
+              <div class="modal-dialog">
+                  <div class="modal-content">
+                      <!-- BEGIN: Modal Header -->
+                      <div class="modal-header">
+                          <h2 class="font-medium text-base mr-auto">Ajouter un OS</h2>
+                      </div> <!-- END: Modal Header -->
+                      <!-- BEGIN: Modal Body -->
+                      <div class="modal-body grid grid-cols-12 gap-4 gap-y-3">
+                          <div class="col-span-12 sm:col-span-12"> <label for="nom_os" class="form-label">Nom OS</label> <input id="nom_os" type="text" class="form-control" placeholder="Windows 10"> </div>
+                          <div class="col-span-12 sm:col-span-12"> <label for="version_os" class="form-label">Version</label> <input id="version_os" type="text" class="form-control" placeholder="10.0.19042"> </div>
+                      </div> <!-- END: Modal Body -->
+                      <!-- BEGIN: Modal Footer -->
+                      <div class="modal-footer text-right"> <button type="button" data-dismiss="modal" class="btn btn-outline-secondary w-20 mr-1">Annuler</button> <button type="button" class="btn btn-primary w-20" id="btn_ajout_os">Ajouter</button> </div> <!-- END: Modal Footer -->
+                  </div>
+              </div>
+            </div> <!-- END: Modal Content Ajout OS-->
+            <div class="intro-y overflow-auto lg:overflow-visible mt-8 sm:mt-0">
+              <table class="table table-report sm:mt-2">
+                  <thead>
+                      <tr>
+                          <th class="whitespace-nowrap">IP</th>
+                          <th class="whitespace-nowrap">Hostname</th>
+                          <th class="text-center whitespace-nowrap">OS</th>
+                          <th class="text-center whitespace-nowrap">OS Version</th>
+                          <th class="text-center whitespace-nowrap">Status</th>
+                          <th class="text-center whitespace-nowrap">ACTIONS</th>
+                      </tr>
+                  </thead>
+                  <tbody id="host_list">
+                    {% for hote in hotes %}
+                      <tr class="intro-x" onclick="document.location = '/ui/{{infra_id}}/host/{{hote.id_host}}';">
+                          <td>
+                              <a class="font-medium whitespace-nowrap">{{ hote.ip }}</a>
+                          </td>
+                          <td>
+                              <a class="font-medium whitespace-nowrap">{{ hote.hostname }}</a> 
+                          </td>
+                          <td class="text-center">{{ hote.os_name }}</td>
+                          <td class="text-center">{{ hote.os_version }}</td>
+                          <td class="w-40">
+                              <div class="flex items-center justify-center text-theme-9"> <i data-feather="check-square" class="w-4 h-4 mr-2"></i> Active </div>
+                          </td>
+                          <td class="table-report__action w-56">
+                              <div class="flex justify-center items-center">
+                                  <a class="flex items-center mr-3" href=""> <i data-feather="check-square" class="w-4 h-4 mr-1"></i> Edit </a>
+                                  <a class="flex items-center text-theme-6" href=""> <i data-feather="trash-2" class="w-4 h-4 mr-1"></i> Delete </a>
+                              </div>
+                          </td>
+                      </tr>
+                    {% endfor %}
+                  </tbody>
+              </table>
+            </div>
+          </div>
+          <!-- END: Listes de hotes -->
+      </div>
+  </div>
+</div>
+{% endblock %}

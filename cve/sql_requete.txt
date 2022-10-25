@@ -1,0 +1,6 @@
+SELECT DISTINCT id_cve FROM CVES NATURAL JOIN CVES_VER
+WHERE application IN (
+SELECT application_name
+FROM Applications) AND version IN (
+SELECT application_version FROM Applications
+WHERE application_name=application)

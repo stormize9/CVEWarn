@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?><sqlb_project><db path="D:/Utilisateurs/raphael/Bureau/projet/ProjetCyber2/db/db.db" readonly="0" foreign_keys="1" case_sensitive_like="0" temp_store="0" wal_autocheckpoint="1000" synchronous="2"/><attached/><window><main_tabs open="structure browser pragmas query" current="0"/></window><tab_structure><column_width id="0" width="300"/><column_width id="1" width="0"/><column_width id="2" width="125"/><column_width id="3" width="2232"/><column_width id="4" width="0"/><expanded_item id="0" parent="1"/><expanded_item id="1" parent="1"/><expanded_item id="2" parent="1"/><expanded_item id="3" parent="1"/></tab_structure><tab_browse><current_table name="4,12:mainApplications"/><default_encoding codec=""/><browse_table_settings/></tab_browse><tab_sql><sql name="SQL 1">CREATE TABLE &quot;Hosts&quot; (
+	&quot;id_host&quot;	TEXT NOT NULL UNIQUE,
+	&quot;ip&quot;	TEXT,
+	&quot;hostname&quot;	TEXT,
+	&quot;id_os&quot;	INTEGER,
+	&quot;id_infrastructure&quot; INTEGER,
+	FOREIGN KEY(&quot;id_os&quot;) REFERENCES OS(id_os),
+	FOREIGN KEY(&quot;id_infrastructure&quot;) REFERENCES Infrastructure(id_infrastructure),
+	PRIMARY KEY(&quot;id_host&quot;)
+);
+
+CREATE TABLE &quot;Applications&quot; (
+	&quot;id_application&quot;	INTEGER NOT NULL UNIQUE,
+	&quot;application_name&quot;	TEXT,
+	&quot;application_version&quot;	TEXT,
+	PRIMARY KEY(&quot;id_application&quot; AUTOINCREMENT)
+);
+
+CREATE TABLE &quot;OS&quot; (
+	&quot;id_os&quot;	INTEGER NOT NULL UNIQUE,
+	&quot;os_name&quot;	INTEGER NOT NULL UNIQUE,
+	&quot;os_version&quot;	TEXT,
+	PRIMARY KEY(&quot;id_os&quot; AUTOINCREMENT)
+);
+
+CREATE TABLE &quot;CVES&quot; (
+	&quot;id_cve&quot;	INTEGER NOT NULL UNIQUE,
+	&quot;title&quot;	TEXT,
+	&quot;publication_date&quot;	DATE,
+	&quot;criticality&quot;	INTEGER,
+    &quot;description&quot;	INTEGER,
+	PRIMARY KEY(&quot;id_cve&quot; AUTOINCREMENT)
+);
+
+CREATE TABLE &quot;States&quot; (
+	&quot;id_state&quot;	INTEGER NOT NULL UNIQUE,
+	&quot;state_name&quot; TEXT,
+	PRIMARY KEY(&quot;id_state&quot; AUTOINCREMENT)
+);
+CREATE TABLE &quot;Infrastructure&quot; (
+	&quot;id_infrastructure&quot;	INTEGER NOT NULL UNIQUE,
+	&quot;login&quot;	TEXT,
+	&quot;password&quot;	TEXT,
+	&quot;infrastructure_name&quot; TEXT,
+	PRIMARY KEY(&quot;id_infrastructure&quot; AUTOINCREMENT)
+);
+
+
+CREATE TABLE &quot;applications_installed&quot; (
+	&quot;id_host&quot; TEXT,
+    &quot;id_application&quot; INTEGER,
+    FOREIGN KEY(&quot;id_host&quot;) REFERENCES Hosts(id_host),
+    FOREIGN KEY(&quot;id_application&quot;) REFERENCES Applications(id_application)
+);
+
+CREATE TABLE &quot;applications_vulnerable&quot; (
+	id_cve INTEGER,
+    id_application INTEGER,
+    FOREIGN KEY(&quot;id_cve&quot;) REFERENCES CVES(id_cve),
+    FOREIGN KEY(&quot;id_application&quot;) REFERENCES Applications(id_application)
+);
+
+CREATE TABLE &quot;os_vulnerable&quot; (
+	id_cve INTEGER,
+    id_os INTEGER,
+    FOREIGN KEY(&quot;id_cve&quot;) REFERENCES CVES(id_cve),
+    FOREIGN KEY(&quot;id_os&quot;) REFERENCES OS(id_os)
+);
+
+INSERT INTO States (state_name)
+VALUES 
+(&quot;A vérifier&quot;),
+(&quot;Non impactant&quot;),
+(&quot;A corrigé&quot;),
+(&quot;Corrigé&quot;);
+
+INSERT INTO Infrastructure (login,password,infrastructure_name)
+VALUES
+(&quot;raphael&quot;, &quot;password&quot;,&quot;Letourneur Company&quot;)
+</sql><current_tab id="0"/></tab_sql></sqlb_project>

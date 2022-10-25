@@ -1,0 +1,57 @@
+{% set name = data.cve[0].title %}
+{% extends 'base.html' %}
+
+{% block content %} 
+<!-- BEGIN: Important Notes -->
+<div class="col-span-12 md:col-span-6 xl:col-span-12 xl:col-start-1 xl:row-start-1 xxl:col-start-auto xxl:row-start-auto mt-3">
+
+    <div class="mt-5 intro-x">
+        <div class="box zoom-in">
+            <div class="tiny-slider" id="important-notes">
+                <div class="p-5">
+                    <div class="text-base font-medium truncate">{{ data.cve[0].title }}</div>
+                        <div class=" mb-3 flex items-center">
+                    {% if data.cve[0].criticality %}
+                        {% if data.cve[0].criticality > 9 %}
+                            <div class="py-1 px-2 rounded-full text-xs bg-theme-6 text-white cursor-pointer font-medium">{{ data.cve[0].criticality}}</div>
+                        {% elif data.cve[0].criticality > 4.5 %}
+                            <div class="py-1 px-2 rounded-full text-xs bg-theme-11 text-white cursor-pointer font-medium">{{ data.cve[0].criticality}}</div>
+                        {% else%}
+                            <div class="py-1 px-2 rounded-full text-xs bg-theme-12 text-white cursor-pointer font-medium">{{ data.cve[0].criticality}}</div>
+                        {% endif %}
+                    {% endif %}
+                    </div>
+                    <div class="text-gray-500 mt-1">{{ data.cve[0].publication_date}}</div>
+                    <div class="text-gray-600 text-justify mt-1">{{ data.cve[0].description }}</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- END: Important Notes -->
+{% if data.cve[0].nb_ver > 0 %}
+<div class="col-span-12 xxl:col-span-3">
+    <div class="xxl:border-l border-theme-5 -mb-10 pb-10">
+        <div class="xxl:pl-6 grid grid-cols-12 gap-6">
+            <!-- BEGIN: Transactions -->
+            <div class="col-span-12 md:col-span-6 xl:col-span-4 xxl:col-span-12 mt-3 xxl:mt-8" style="margin-right: 90px;">
+                <div class="intro-x flex items-center h-10">
+                    <h2 class="text-lg font-medium truncate mr-5">
+                        Versions impactées
+                    </h2>
+                </div>
+                {% for cve in data.cve %}
+                    <div class="intro-x">
+                        <div class="box px-5 py-3 mb-3 flex items-center zoom-in">
+                            <div class="ml-4 mr-auto">
+                                <div class="font-medium"><p>{{ cve.version }}</p></div>
+                                <div class="text-gray-600 text-xs mt-0.5">{{ cve.application }}</div>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                    {% endif %}
+                </div>
+            </div>
+            <!-- END: Transactions -->
+{% endblock %}

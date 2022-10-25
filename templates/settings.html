@@ -1,0 +1,56 @@
+{% set name = 'Settings' %}
+{% extends 'base.html' %}
+{% block content %}
+
+<button type="button" id="button_agent_windows" class="btn btn-primary" onclick="window.location.href='settings/agentwindows'">Télécharger Agent Windows</button>
+<button type="button" id="button_agent_linux" class="btn btn-primary" onclick="window.location.href='settings/agentlinux'">Télécharger Agent Linux</button>
+
+<!-- BEGIN: Personal Information -->
+<div class="intro-y box mt-5">
+    <div class="flex items-center p-5 border-b border-gray-200 dark:border-dark-5">
+        <h2 class="font-medium text-base mr-auto">
+            Informations personnelles
+        </h2>
+    </div>
+    <div class="p-5">
+    <form action="settings" method="post">
+        <div class="grid grid-cols-12 gap-x-5">
+            <div class="col-span-12 xl:col-span-6">
+                <div>
+                    <label for="update-profile-nameinfra" class="form-label">Nom de l'infrastructure</label>
+                    <input id="update-profile-nameinfra" type="text" class="form-control" placeholder="Input text" value="{{ user.id_infrastructure }}" disabled>
+                </div>
+                <div class="mt-3">
+                    <label for="update-profile-name" class="form-label">Nom</label>
+                    <input name="update-profile-name" id="update-profile-name" type="text" class="form-control" placeholder="Input text" value="{{ user.nom_referent }}">
+                </div>
+                <div class="mt-3">
+                    <label for="update-profile-prenom" class="form-label">Prénom</label>
+                    <input name="update-profile-prenom" id="update-profile-prenom" type="text" class="form-control" placeholder="Input text" value="{{ user.prenom_referent }}">
+                </div>
+            </div>
+            <div class="col-span-12 xl:col-span-6">
+                <div class="mt-3 xl:mt-0">
+                    <label for="update-profile-id" class="form-label">Identifiant</label>
+                    <input id="update-profile-id" type="text" class="form-control" placeholder="Input text" value="{{ user.login }}" disabled>
+                </div>
+                <div class="mt-3">
+                    <label for="update-profile-tel" class="form-label">Téléphone</label>
+                    <input name=update-profile-tel id="update-profile-tel" type="text" class="form-control" placeholder="Input text" value="{{ user.tel_referent }}">
+                </div>
+                <div class="mt-3">
+                    <label for="update-profile-email" class="form-label">Email</label>
+                    <input name="update-profile-email" id="update-profile-email" type="text" class="form-control" placeholder="Input text" value="{{ user.mail_referent }}">
+                </div>
+            </div>
+        </div>
+        <div class="flex justify-end mt-4">
+            <button type="submit" class="btn btn-primary w-30 mr-auto">Sauvegarder</button>
+            <a onclick="alert('Veuillez contacter le service clients pour procéder à la suppression de votre compte !');" class="text-theme-6 flex items-center"> <i data-feather="trash-2" class="w-4 h-4 mr-1"></i> Supprimer compte </a>
+        </div>
+    </form>
+    </div>
+</div>
+<!-- END: Personal Information -->
+
+{% endblock %}

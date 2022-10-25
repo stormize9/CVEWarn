@@ -1,0 +1,140 @@
+{% set name = 'CVE' %}
+{% extends 'base.html' %}
+
+{% block content %}
+<!-- BEGIN: General Report -->
+<div class="col-span-12 mt-8">
+    <div class="intro-y flex items-center h-10">
+    </div>
+    <div class="grid grid-cols-12 gap-6 mt-5">
+        <div class="col-span-12 sm:col-span-6 xl:col-span-3 intro-y">
+            <div class="report-box zoom-in">
+                <div class="box p-5">
+                    <div class="flex">
+                        <i data-feather="alert-triangle" class="report-box__icon text-theme-12"></i> 
+                    </div>
+                    <div class="text-3xl font-bold leading-8 mt-6">{{nb_cve|length}}</div>
+                    <div class="text-base text-gray-600 mt-1">Nombre de CVE</div>
+                </div>
+            </div>
+        </div>
+        {% if app_imp %}
+        <div class="col-span-12 sm:col-span-6 xl:col-span-3 intro-y">
+            <div class="report-box zoom-in">
+                <div class="box p-5">
+                    <div class="flex">
+                        <i data-feather="alert-triangle" class="report-box__icon text-theme-12"></i> 
+                    </div>
+                    <div class="text-xl font-bold leading-8 mt-6">{{app_imp.application_name}}</div>
+                    <div class="text-base text-gray-600 mt-1">Application la plus vulnérable</div>
+                </div>
+            </div>
+        </div>
+        <div class="col-span-12 sm:col-span-6 xl:col-span-3 intro-y">
+            <div class="report-box zoom-in">
+                <div class="box p-5">
+                    <div class="flex">
+                        <i data-feather="alert-triangle" class="report-box__icon text-theme-12"></i> 
+                    </div>
+                    <div class="text-xl font-bold leading-8 mt-6">{{highest_cve[0].title}} - {{highest_cve[0].hostname}} </div>
+                    <div class="text-base text-gray-600 mt-1">CVE la plus critique</div>
+                </div>
+            </div>
+        </div>
+        <div class="col-span-12 sm:col-span-6 xl:col-span-3 intro-y">
+            <div class="report-box zoom-in">
+                <div class="box p-5">
+                    <div class="flex">
+                        <i data-feather="alert-triangle" class="report-box__icon text-theme-12"></i> 
+                    </div>
+                    <div class="text-xl font-bold leading-8 mt-6">{{host_impacte[0].hostname}}</div>
+                    <div class="text-base text-gray-600 mt-1">Hôte le plus vulnérable</div>
+                </div>
+            </div>
+        </div>
+        {% endif %}
+
+        
+    </div>
+</div>
+<!-- END: General Report -->
+{% if nb_cve|length %}
+<div class="col-span-6 mt-6">
+    <div class="intro-y block sm:flex items-center h-10">
+        <h2 class="text-lg font-medium truncate mr-5">
+            Listes des CVE
+        </h2>
+    </div>
+    <div class="intro-y overflow-auto lg:overflow-visible mt-8 sm:mt-0">
+        <table class="table table-report sm:mt-2">
+            <thead>
+                <tr>
+                    <th class="whitespace-nowrap">CVE ID</th>
+                    <th class="whitespace-nowrap">Date de publicaiton</th>
+                    <th class="text-center whitespace-nowrap">Criticité</th>
+                    <th class="text-center whitespace-nowrap">Application</th>
+                    <th class="text-center whitespace-nowrap">Version</th>
+                    <th class="text-center whitespace-nowrap">Hôte concerné</th>
+                    <th class="text-center whitespace-nowrap">ACTIONS</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for cve in data.cve %}
+                <tr class="intro-x">
+                    <td>
+                        <a  href="/ui/{{ infra_id }}/cve/{{ cve.title }}">{{ cve.title }}</a>
+                    </td>
+                    <td>
+                        <a class="text-center">{{ cve.publication_date }}</a> 
+                    </td>
+                    <td class="text-center">{{ cve.criticality }}</td>
+                    <td class="text-center">{{ cve.application_name }}</td>
+                    <td class="text-center">{{ cve.application_version }}</td>
+                    <td class="text-center"><a href = "/ui/{{ infra_id }}/host/{{cve.id_host}}">{{ cve.hostname }}</a></td>
+
+
+                    <td class="table-report__action w-56">
+                        <div class="flex justify-center items-center">
+                            <a href="javascript:;" data-toggle="modal" data-target="#modal_{{ cve.id_vuln }}" class="flex items-center mr-3" href=""> <i data-feather="check-square" class="w-4 h-4 mr-1"></i> Approuver </a>
+                            
+                        </div>
+                    </td>
+                </tr>
+                <!-- BEGIN: Modal Content Approuver vulnérabilité-->
+                <div id="modal_{{ cve.id_vuln }}" class="modal" tabindex="-1" aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <!-- BEGIN: Modal Header -->
+                            <div class="modal-header">
+                                <h2 class="font-medium text-base mr-auto">Approuver une vulnérabilité</h2>
+                            </div> <!-- END: Modal Header -->
+                            <!-- BEGIN: Modal Body -->
+                            <div class="">
+                                <div style="margin: 9px;"> <label for="IP" class="form-label">Êtes-vous sûr de vouloir approuver cette vulnérabilité ? Cela signifique que vous avez corrigé cette vulnérabilité, elle ne sera plus affiché sur votre dashboard.</label></div>
+                                <div class="col-span-12 sm:col-span-12"> </label>
+                                </select>
+                                </div>
+                            </div> <!-- END: Modal Body -->
+                            <!-- BEGIN: Modal Footer -->
+                            <div class="modal-footer text-right"> <button type="button" data-dismiss="modal" class="btn btn-outline-secondary w-20 mr-1">Annuler</button> <a href ="/ui/{{ infra_id }}/cve/approuv_{{ cve.id_vuln }}"><button id="btn_ajout_hote" type="button" class="btn btn-primary w-20">Approuver</button> </a></div> <!-- END: Modal Footer -->
+                        </div>
+                    </div>
+                </div> 
+                <!-- END: Modal Content Approuver vulnérabilité-->
+
+                {% endfor %}
+                
+            </tbody>
+            
+        </table>
+    </div>
+</div>
+{% else %}
+<div class="nocve">
+    <h1>PAS DE CVE</h1>
+</div>
+<style>
+    .nocve{margin-top:20px;text-align: center;font-size:50px;}
+</style>
+{% endif %}
+{% endblock %}

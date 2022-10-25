@@ -1,0 +1,40 @@
+{% set name = data_host_and_apps[0].hostname %}
+{% extends 'base.html' %}
+
+{% block content %} 
+    <h2>Hote : {{ data_host_and_apps[0].hostname }}</h2>
+    <h4>Dernière mise à jour : XX/XX/XXXX</h4>
+    <h4>IP : {{ data_host_and_apps[0].ip }}</h4>
+    <h4>Identifiant : {{ data_host_and_apps[0].id_host }}</h4>
+    <h4>OS : </h4>
+    <h5>{{ data_host_and_apps[0].os_name }} {{ data_host_and_apps[0].os_version }}</h5>
+    <br>
+    
+<div class="col-span-6 mt-6">
+  <div class="intro-y block sm:flex items-center h-10">
+      <h2 class="text-lg font-medium truncate mr-5">
+          Listes des Applications
+      </h2>
+  </div>
+  <div class="intro-y overflow-auto lg:overflow-visible mt-8 sm:mt-0">
+      <table class="table table-report sm:mt-2">
+          <thead>
+              <tr>
+                  <th class="whitespace-nowrap">Application</th>
+                  <th class="whitespace-nowrap">Version</th>
+
+              </tr>
+          </thead>
+          <tbody>
+              {% for apps in data_host_and_apps %}
+              <tr class="intro-x">
+                <td>{{ apps.application_name }}</td>
+                <td>{{ apps.application_version }}</td>
+              </tr>
+              {% endfor %}
+          </tbody>
+      </table>
+  </div>
+</div>
+
+{% endblock %}

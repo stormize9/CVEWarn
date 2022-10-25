@@ -1,0 +1,72 @@
+<html>
+<head>
+  <link rel="stylesheet" href="/static/css/bootstrap.min.css">
+  <style>
+    body {
+      background: #007bff;
+      background: linear-gradient(to right, #0062E6, #33AEFF);
+    }
+
+    .btn-login {
+      font-size: 0.9rem;
+      letter-spacing: 0.05rem;
+      padding: 0.75rem 1rem;
+    }
+     .mentionlegale {
+
+position:absolute;
+text-align:center;
+bottom:0;
+width:100%;
+padding-top:50px;
+}
+.txt{
+  text-align: center;
+}
+  </style>
+</head>
+
+<body>
+          
+  {% with messages = get_flashed_messages(with_categories=true) %}
+  {% if messages %}
+
+      {% for category, message in messages %}
+      <div class="alert alert-{{ category }}" role="alert">
+          {{ message }}
+      </div>
+      {% endfor %}
+  {% endif %}
+  {% endwith %}
+  <div class="container">
+    <div class="row">
+      <div class="col-sm-9 col-md-7 col-lg-5 mx-auto">
+        <div class="card border-0 shadow rounded-3 my-5">
+          <div class="card-body p-4 p-sm-5">
+            <img src="/static/logo/logoWhite.png" style="width: 50%; margin-left: 25%; margin-right: 25%;">
+            <form action="/login" method="POST">
+              <div class="form-floating mb-3">
+                <input class="form-control" name="username" id="floatingInput" placeholder="username">
+                <label for="floatingInput">Username</label>
+              </div>
+              <div class="form-floating mb-3">
+                <input type="password" name="password" class="form-control" id="floatingPassword" placeholder="Password">
+                <label for="floatingPassword">Password</label>
+              </div>
+              <div class="d-grid">
+                <button class="btn btn-primary btn-login text-uppercase fw-bold" type="submit">Connexion</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="mentionlegale">
+    <div class="txt">
+    © 2022 ON EST PAS RESPONSABLE DE VOS MERDES    
+  </div>
+</body>
+
+
+</html>

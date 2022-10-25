@@ -1,0 +1,105 @@
+{% set name = 'Dashboard' %}
+{% extends 'base.html' %}
+
+{% block content %}
+<style>
+    #search{
+        margin-left: 30px;
+    }
+</style>
+<div class="grid grid-cols-12 gap-6">
+    <div class="col-span-12 ">
+        <div class="grid grid-cols-12 gap-6">
+            <!-- BEGIN: General Report -->
+            <div class="col-span-12 mt-8">
+                <div class="intro-y flex items-center h-10">
+                    <h2 class="text-lg font-medium truncate mr-5">
+                        Report général
+                    </h2>
+                </div>
+                <div class="grid grid-cols-12 gap-6 mt-5">
+                    <div class="col-span-12 sm:col-span-6 xl:col-span-3 intro-y">
+                        <div class="report-box zoom-in">
+                            <div class="box p-5">
+                                <div class="text-3xl font-bold leading-8 mt-6">{{ size_cve }}</div>
+                                <div class="text-base text-gray-600 mt-1">CVE existantes</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-span-12 sm:col-span-6 xl:col-span-3 intro-y">
+                        <div class="report-box zoom-in">
+                            <div class="box p-5">
+                                <div class="text-3xl font-bold leading-8 mt-6">{{ nb_last_cve[0].nb_cve }}</div>
+                                <div class="text-base text-gray-600 mt-1">Nouvelles CVE cette semaine</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- END: General Report -->
+            <div class="col-span-12 mt-6">
+                <div class="intro-y block sm:flex items-center h-10">
+                    <h2 class="text-lg font-medium truncate mr-5">
+                        Dernières CVE
+                    </h2>
+                    <a href="/ui/{{ infra_id }}/cve/update_last_CVE" data-toggle="modal" data-target="#modal_ajout_hote" class="btn btn-success">Mettre à jour les dernières CVE</a>
+                    <form role="search" id="form">
+                    <div class="w-full sm:w-auto mt-3 sm:mt-0 sm:ml-auto md:ml-0" id="search">
+                        <div class="w-56 relative text-slate-500">
+                            <input type="search" id="query" name="q"class="form-control w-56 box pr-10" placeholder="CVE..." pattern="CVE-\d{4}-\d{4,7}" oninvalid="this.setCustomValidity('Veuillez respecter le format CVE-XXXX-XXXX')"
+                            oninput="this.setCustomValidity('')">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" icon-name="search" class="lucide lucide-search w-4 h-4 absolute my-auto inset-y-0 mr-3 right-0" data-lucide="search"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                                <circle cx="11" cy="11" r="8"></circle>
+                                <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                            </svg>
+                            <i class="w-4 h-4 absolute my-auto inset-y-0 mr-3 right-0" data-lucide="search"></i>
+                        </div>
+                    </div>
+                </form>
+            </div>
+                <div class="intro-y overflow-auto lg:overflow-visible mt-8 sm:mt-0">
+                    <table class="table table-report sm:mt-2">
+                        <thead>
+                            <tr>
+                                <th class="text-center whitespace-nowrap">CVE ID</th>
+                                <th class="text-center whitespace-nowrap">DATE DE PUBLICATION</th>
+                                <th class="text-center whitespace-nowrap">DESCRIPTION</th>
+                                <th class="text-center whitespace-nowrap">ACTIONS</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for cve in last_cve_data.cve %}
+                            <tr class="intro-x">
+                                <td class="w-40"><div class="text-center">{{ cve.title }}</div></td>
+                                <td class="text-center"><a>{{ cve.date_fr }}</a></td>
+                                <td class="text-center">{{ cve.description }} </td>
+                                <td class="table-report__action w-56">
+                                    <div class="flex justify-center items-center">
+                                        <a href="/ui/{{ infra_id }}/cve/{{ cve.title }}" class="text-center"> Voir applications et versions impactées </a>
+                                        </div>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+
+        </div>
+    </div>
+</div>
+
+<script>
+    const f = document.getElementById('form');
+    const q = document.getElementById('query');
+    const google = '/ui/{{ infra_id }}/cve/';
+
+    function submitted(event) {
+      event.preventDefault();
+      const url = google + q.value;
+      const win = window.open(url, '_blank');
+      win.focus();
+    }
+
+    f.addEventListener('submit', submitted);
+  </script>
+{% endblock %}
