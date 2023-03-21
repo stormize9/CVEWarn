@@ -9,7 +9,7 @@ import multiprocessing
 from github import Github
 from github.ContentFile import ContentFile
 
-ACCESS_TOKEN = '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'
+ACCESS_TOKEN = '[TOKEN]'
 
 g = Github(ACCESS_TOKEN)
 
